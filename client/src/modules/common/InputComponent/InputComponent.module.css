@@ -1,0 +1,51 @@
+.main {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.main input{
+    height: 56px;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0 12px;
+    /* Padding for input */
+    margin-bottom: 20px;
+    /* Space between input fields */
+}
+
+.customInput,.inputField {
+    height: 56px;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0 12px;
+    /* Padding for input */
+    margin-bottom: 20px;
+    /* Space between input fields */
+}
+
+
+
+.searchInput {
+    outline: none;
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    border: 2px solid #000000;
+}
+
+.whatsappInput {
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}

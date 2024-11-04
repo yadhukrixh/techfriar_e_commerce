@@ -1,0 +1,10 @@
+.homeContainer{
+    padding-right: 100px;
+    padding-left: 100px;
+}
+
+.mainSection{
+    margin-top: 70px;
+    display: flex;
+    flex-direction: row;
+}

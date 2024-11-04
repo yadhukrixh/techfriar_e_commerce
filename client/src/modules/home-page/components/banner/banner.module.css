@@ -1,0 +1,16 @@
+.exploreBlock {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .imageContainer {
+    position: relative;
+    width: 100%;
+
+  }
+
+  .fullWidthImage {
+    width: 100%;
+    height: auto;
+  }

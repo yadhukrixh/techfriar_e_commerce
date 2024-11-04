@@ -1,0 +1,9 @@
+.loginPage{
+    background-image: url('/icons/Background.png');
+    background-size: cover;
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
