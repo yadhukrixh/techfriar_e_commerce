@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import connectToDatabase from "./config/database.js";
 import authRouter from "./routes/user/auth-route.js";
 import productRouter from './routes/product/product-route.js'
-import { productSeeder } from "./modules/products/migrations/product-seeder.js";
+import { offerSeeder, productSeeder } from "./modules/products/migrations/product-seeder.js";
 dotenv.config();
 
 const app = express();
@@ -19,7 +19,8 @@ app.use(
 
 app.use(express.json());
 
-//productSeeder()
+// productSeeder()
+// offerSeeder()
 
 app.use("/auth",authRouter);
 

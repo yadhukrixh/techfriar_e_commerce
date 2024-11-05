@@ -7,6 +7,7 @@ export const loginRepo = async(credential,password) => {
         if(user.password === password){
             return{
                 status:true,
+                data:user.id,
                 message:"Password matched"
             }
         }

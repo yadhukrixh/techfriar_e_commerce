@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "./product-list.css";
-import { fetchProductList } from "../../services/home-services";
+import { addTocart, fetchProductList } from "../../services/home-services";
 
 export interface ProductData {
+  _id:string;
   name: string;
   image: string;
   description: string;
@@ -66,9 +67,7 @@ const ProductList = () => {
                 <div className="head-1">{product.name}</div>
                 <p className="sub-head-1">{product.description}</p>
                 <p className="price">$ {product.price}</p>
-                <a href="../cart/cart.html">
-                  <button className="buy-button">Add to Cart</button>
-                </a>
+                  <button className="buy-button" onClick={()=>{addTocart(product._id)}}>Add to Cart</button>
               </div>
             </div>
           );

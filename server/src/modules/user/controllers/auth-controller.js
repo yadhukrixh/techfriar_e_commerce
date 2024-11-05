@@ -1,4 +1,5 @@
 import { loginRepo, signUpRepo } from "../repository/auth-repository.js";
+import jwt from "jsonwebtoken";
 
 // login controller
 export const loginController = async (req, res) => {
@@ -9,6 +10,15 @@ export const loginController = async (req, res) => {
     }
 
     const login = await loginRepo(credential, password);
+    if(login.status){
+      const token = jwt.sign(
+        { id: login.data },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+      res.json({status:true,message:"User loged in success fully",userToken:login.data})
+    }
+    
 
     console.log(login);
   } catch (error) {

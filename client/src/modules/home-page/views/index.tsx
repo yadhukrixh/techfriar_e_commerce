@@ -4,6 +4,7 @@ import Filter from '../components/filter/filter';
 import styles from './home.module.css';
 import ProductList from '../components/product-list/product-list';
 
+
 const HomePage = () => {
   return (
     <div className={styles.homeContainer}>

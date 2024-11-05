@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "antd": "^5.21.6",
     "axios": "^1.7.7",
+    "js-cookie": "^3.0.5",
     "next": "15.0.2",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
@@ -17,6 +19,8 @@
     "sweetalert2": "^11.14.4"
   },
   "devDependencies": {
+    "@types/antd": "^0.12.32",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.17.6",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18",
