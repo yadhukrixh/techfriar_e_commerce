@@ -186,12 +186,16 @@
     border: none;
     border-radius: 8px;
   }
+
+  .product-image{
+    width: 300px;
+  }
   .product-item {
     position: relative;
   }
   
   .offer-popup {
-    display: none;
+    display: block;
     position: absolute;
     top: 20px;
     left: 20px;
@@ -552,7 +556,7 @@
   
   /* Modal styles */
   .modal {
-    display: none;
+    display: block;
     position: absolute;
     top: 20px;
     left: 20px;

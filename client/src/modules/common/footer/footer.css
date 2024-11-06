@@ -190,20 +190,7 @@ body {
   position: relative;
 }
 
-.offer-popup {
-  display: none;
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  /* transform: translateX(-50%); */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 10px 70px 10px 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-  border-radius: 8px;
-  text-align: left;
-}
+
 
 .offer-popup p {
   margin: 8px 0;
@@ -552,7 +539,7 @@ S .social-icons a {
 
 /* Modal styles */
 .modal {
-  display: none;
+  display: block;
   position: absolute;
   top: 20px;
   left: 20px;

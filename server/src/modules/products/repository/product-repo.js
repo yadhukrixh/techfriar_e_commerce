@@ -1,4 +1,6 @@
 import Cart from "../models/cart-model.js";
+import Offers from "../models/offers.js";
+import Order from "../models/ordres.js";
 import Products from "../models/product-model.js";
 
 // seed product
@@ -107,6 +109,23 @@ export const fetchProductsOnCartRepo = async(userId) => {
     })
     
     return  formattedProducts;
+}
+
+
+// fetch orders count
+export const fetchOrderCount = async(userId) => {
+    const order = await Order.find({
+        userId:userId,
+        status:"success"
+    })
+
+    return order.length
+}
+
+// fetch offers
+export const fetchOffers = async() => {
+    const offers = await Offers.find();
+    return offers;
 }
 
 // fetch offers and price

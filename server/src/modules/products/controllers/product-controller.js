@@ -1,7 +1,11 @@
+import { response } from "express";
+import { ordersData } from "../../../data/orders.js";
 import {
   addProductToCart,
   checkProductInCart,
   fetchAllProductRepo,
+  fetchOffers,
+  fetchOrderCount,
   fetchProduct,
   fetchProductsOnCartRepo,
   updateProductCountOnCart,
@@ -53,11 +57,20 @@ export const fetchPriceAndOffers = async (req, res) => {
   // price data list
   let priceDataList = [];
 
+  // total price
   let totalPrice = 0;
-
-  for (const i of priceDataList) {
-    totalPrice = totalPrice + i.totalAmountPerItem
+  for (const i of productsOncart) {
+    totalPrice = totalPrice + i.count * i.price;
   }
+
+  // total payable amount
+  let totalPayableAmount = 0;
+
+  // offers
+  let offerList = [];
+
+  //response data
+  let responseData = {};
 
   // conditions for per item
   for (const product of productsOncart) {
@@ -67,6 +80,8 @@ export const fetchPriceAndOffers = async (req, res) => {
         productId: product.productId,
         productName: product.name,
         totalAmountPerItem: (product.price / 2) * product.count,
+        count:product.count,
+        offers: ["BUY 1 GET 1"],
       };
       priceDataList.push(data);
     }
@@ -78,6 +93,8 @@ export const fetchPriceAndOffers = async (req, res) => {
           productId: product.productId,
           productName: product.name,
           totalAmountPerItem: 75 * product.count,
+          count:product.count,
+          offers: ["Bulk Purchase Discount"],
         };
         priceDataList.push(data);
       } else {
@@ -85,6 +102,8 @@ export const fetchPriceAndOffers = async (req, res) => {
           productId: product.productId,
           productName: product.name,
           totalAmountPerItem: product.price * product.count,
+          count:product.count,
+          offers: [],
         };
         priceDataList.push(data);
       }
@@ -98,6 +117,8 @@ export const fetchPriceAndOffers = async (req, res) => {
             productId: item.productId,
             productName: item.name,
             totalAmountPerItem: item.count * item.price - 10,
+            count:item.count,
+            offers: ["Combo Discount"],
           };
           priceDataList.push(data);
           break;
@@ -108,13 +129,15 @@ export const fetchPriceAndOffers = async (req, res) => {
     // condtion 4 - limited time discount
     if (product.key === "PF4") {
       const startDate = new Date("2024,11,01");
-      const endDate = new Date("2024,11,03");
+      const endDate = new Date("2024,11,20");
       const date = new Date();
       if (date > startDate && date < endDate) {
         const data = {
           productId: product.productId,
           productName: product.name,
           totalAmountPerItem: product.count * product.price * (85 / 100),
+          count:product.count,
+          offers: ["Limited Time Discount"],
         };
         priceDataList.push(data);
       } else {
@@ -122,6 +145,8 @@ export const fetchPriceAndOffers = async (req, res) => {
           productId: product.productId,
           productName: product.name,
           totalAmountPerItem: product.price * product.count,
+          count:product.count,
+          offers: [],
         };
         priceDataList.push(data);
       }
@@ -134,13 +159,17 @@ export const fetchPriceAndOffers = async (req, res) => {
           productId: product.productId,
           productName: product.name,
           totalAmountPerItem: product.count * product.price * (90 / 100),
+          count:product.count,
+          offers: ["Tiered Discount"],
         };
         priceDataList.push(data);
       } else if (product.count >= 4) {
         const data = {
           productId: product.productId,
           productName: product.name,
-          totalAmountPerItem: 2 * product.price * (80 / 100),
+          totalAmountPerItem: product.count * product.price * (80 / 100),
+          count:product.count,
+          offers: ["Tiered Discount"],
         };
         priceDataList.push(data);
       } else {
@@ -148,6 +177,8 @@ export const fetchPriceAndOffers = async (req, res) => {
           productId: product.productId,
           productName: product.name,
           totalAmountPerItem: product.price * product.count,
+          count:product.count,
+          offers: [],
         };
         priceDataList.push(data);
       }
@@ -161,6 +192,8 @@ export const fetchPriceAndOffers = async (req, res) => {
             productId: item.productId,
             productName: item.name,
             totalAmountPerItem: item.count * item.price * (75 / 100),
+            count:item.count,
+            offers: ["Seasonal Discount"],
           };
           priceDataList.push(data);
           break;
@@ -169,21 +202,87 @@ export const fetchPriceAndOffers = async (req, res) => {
     }
   }
 
-
-  // calculating total price
-  for (const i of priceDataList) {
-    totalPrice = totalPrice + i.totalAmountPerItem
-  }
-
   // conditions on cart
-  if(priceDataList.length === 5){
-    totalPrice = totalPrice * (90/100)
-  }else if(priceDataList.length >= 6){
-    totalPrice = totalPrice * (85/100)
+
+  //condition 8 - Loyality program discount
+  const orderCount = await fetchOrderCount(userId); // fetch order count
+  let loyalityPriceDataList = [];
+  //format each item after checking loayality discount
+  if (orderCount >= 5) {
+    for (const product of priceDataList) {
+      const data = {
+        ...product,
+        offers: product.offers.concat("Loyality Discount"),
+        totalAmountPerItem: product.totalAmountPerItem * (95 / 100),
+      };
+      loyalityPriceDataList.push(data);
+    }
   }
 
+  if (orderCount >= 5) {
+    for (const i of loyalityPriceDataList) {
+      totalPayableAmount = totalPayableAmount + i.totalAmountPerItem;
+    }
 
+    // condition 7 - buy more save more
+    if (loyalityPriceDataList.length === 5) {
+      totalPayableAmount = totalPayableAmount * (90 / 100);
 
+      offerList.push("Buy More Save More");
+    } else if (loyalityPriceDataList.length >= 6) {
+      totalPayableAmount = totalPayableAmount * (85 / 100);
 
-  res.json({ status: true, data: priceDataList });
+      offerList.push("Buy More Save More");
+    }
+
+    // condition 9 -cartwide discount
+    if (totalPayableAmount > 500) {
+      totalPayableAmount = totalPayableAmount * (95 / 100);
+      offerList.push("Cart Wide Discount");
+    }
+
+    // responseData
+    responseData = {
+      priceDataList: loyalityPriceDataList,
+      cartOffers: offerList,
+    };
+  } else {
+    for (const i of priceDataList) {
+      totalPayableAmount = totalPayableAmount + i.totalAmountPerItem;
+    }
+
+    // conditiono 7 - buy more save more
+    if (priceDataList.length === 5) {
+      totalPayableAmount = totalPayableAmount * (90 / 100);
+
+      offerList.push("Buy More Save More");
+    } else if (priceDataList.length >= 6) {
+      totalPayableAmount = totalPayableAmount * (85 / 100);
+
+      offerList.push("Buy More Save More");
+    }
+
+    // condition 9 -cartwide discount
+    if (totalPayableAmount > 500) {
+      totalPayableAmount = totalPayableAmount * (95 / 100);
+      offerList.push("Cart Wide Discount");
+    }
+
+    // response Data
+    responseData = {
+      priceDataList: priceDataList,
+      cartOffers: offerList,
+    };
+  }
+
+  // response
+  responseData = {
+    ...responseData,
+    totalPrice:totalPrice,
+    totalPayableAmount:totalPayableAmount,
+    discount:totalPrice-totalPayableAmount
+  }
+
+  res.json({status:true,data:responseData});
+
 };

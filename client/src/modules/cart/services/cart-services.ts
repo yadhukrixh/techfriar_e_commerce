@@ -3,8 +3,17 @@ import { CartData } from "../views";
 
 export interface PriceAndOffers {
     productId: string;
-    totalAmount: number;
+    totalAmountPerItem: number;
+    count:number;
+    productName:string;
     offers: [string];
+}
+
+export interface CartMainData{
+    cartOffers:[string];
+    totalPrice:number;
+    totalPayableAmount:number;
+    discount:number;
 }
 
 // fetch product details
@@ -28,7 +37,7 @@ export const fetchProductsOncart = async (setcartlist: (data: CartData[]) => voi
 }
 
 // fetch amount per item
-export const fetchPriceAndOffers = async (setPriceDetails: (list: PriceAndOffers[]) => void) => {
+export const fetchPriceAndOffers = async (setPriceDetails: (data:PriceAndOffers[]) => void, setMainCartData:(data:CartMainData)=>void) => {
     let userId;
     const cookies = document.cookie.split(';');
     for (let cookie of cookies) {
@@ -40,5 +49,30 @@ export const fetchPriceAndOffers = async (setPriceDetails: (list: PriceAndOffers
         }
     }
 
+
     const response = await axios.post('http://localhost:4000/products/fetchPriceAndOffers', { userId });
+    setPriceDetails(response.data.data.priceDataList);
+    const data:CartMainData={
+        cartOffers:response.data.data.cartOffers,
+        totalPrice:response.data.data.totalPrice,
+        totalPayableAmount:response.data.data.totalPayableAmount,
+        discount:response.data.data.discount
+    }
+
+    setMainCartData(data);
+}
+
+export const deleteProductFromCart = async(productId:string)=>{
+    let userId;
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        // Remove leading spaces
+        cookie = cookie.trim();
+        if (cookie.startsWith('userToken')) {
+            // Return the value after the equal sign
+            userId = (cookie.split('=')[1] || null);
+        }
+    }
+
+    const response = await axios.post('http://localhost:4000/products/deleteProductsFromCart', { userId });
 }

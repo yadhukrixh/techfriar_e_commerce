@@ -1,50 +1,74 @@
 import QuantitySelector from "@/modules/common/quantity-selector/quantity-selector";
-import React, { useState } from "react";
-import './product-card.css'
+import React, { useEffect, useState } from "react";
+import "./product-card.css";
 import { CartData } from "../../views";
+import { deleteProductFromCart, PriceAndOffers } from "../../services/cart-services";
 
-interface ProductCardProps{
-    productData:CartData
+interface ProductCardProps {
+  productData: CartData;
+  priceList: PriceAndOffers[];
 }
 
-const ProductCard:React.FC<ProductCardProps> = ({productData}) => {
-    const [quantity,setQuantity] = useState(1);
-    const totalPrice = 0;
+const ProductCard: React.FC<ProductCardProps> = ({
+  productData,
+  priceList,
+}) => {
+  const [priceData, setPriceData] = useState<PriceAndOffers>();
+  const [quantity, setQuantity] = useState(priceData?.count);
+  const [offerPopup, setOfferPopup] = useState(false);
 
-    const aFunction = () => {
-        console.log("")
+  useEffect(() => {
+    for (const i of priceList) {
+      if (i.productId === productData.productId) {
+        setPriceData(i);
+      }
     }
+  }, [priceList]);
+
+  const aFunction = () => {
+    setOfferPopup(!offerPopup);
+  };
+
   return (
     <div className="product-item">
-      <img src={productData.image} alt="" />
+      <img className="product-image" src={productData.image} alt="" />
       <div className="product-details">
         <div>
           <h3>{productData.name}</h3>
         </div>
         <p>{productData.description}</p>
-        <p className="price">${totalPrice}</p>
+        <p className="price">${priceData?.totalAmountPerItem}</p>
         <div className="pop">
           <p className="offer" onClick={aFunction}>
-            1 Offers Available
+            {priceData?.offers.length} Offers Available
             <span className="offer-image">
               <img src="icons/iemo.png" alt="" />
             </span>
           </p>
-          <div className="offer-popup" id="Popup">
-            <p>
-              <strong>Offers Applied</strong>
-            </p>
-            <p>Buy 1 Get 1 Free</p>
-            <button onClick={aFunction}>Close</button>
-          </div>
+          {offerPopup && (
+            <div className="offer-popup" id="Popup">
+              <p>
+                <strong>Offers Applied</strong>
+              </p>
+              {priceData?.offers.map((offer) => {
+                return (
+                  <>
+                    <p>{offer}</p>
+                  </>
+                );
+              })}
+
+              <button onClick={aFunction}>Close</button>
+            </div>
+          )}
         </div>
         <QuantitySelector
           minimum={1}
-          quantity={quantity}
+          quantity={priceData?.count ? priceData.count : 1}
           setQuantity={setQuantity}
         />
       </div>
-      <div className="product-actions">
+      <div className="product-actions" onClick={()=>{deleteProductFromCart(productData.productId)}}>
         <span className="wishlist-icon">
           <img className="wishlist-icon" src="icons/delete.png" alt="" />
         </span>
