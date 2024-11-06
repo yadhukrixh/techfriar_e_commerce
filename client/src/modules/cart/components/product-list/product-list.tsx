@@ -18,7 +18,7 @@ const ProductList: React.FC<ProductListProps> = ({
   setMainCartData,
 }) => {
   const [priceList, setPriceList] = useState<PriceAndOffers[]>([]);
-  const [pricedata, setPricedata] = useState<PriceAndOffers>();
+  const [triggerFlag,setTriggerFlag] = useState(true)
 
   // fetch priceList offer
   useEffect(() => {
@@ -26,20 +26,16 @@ const ProductList: React.FC<ProductListProps> = ({
       await fetchPriceAndOffers(setPriceList, setMainCartData);
     };
     fetchPriceOfferList();
-  }, []);
-
-  const fetchPriceData = (productId: string) => {
-    for (const i of priceList) {
-      if (i.productId === productId) {
-        setPricedata(i);
-      }
-    }
-  };
+  }, [triggerFlag]);
 
   return (
     <div className="product-list">
       {cartList.map((data) => {
-        return <ProductCard productData={data} priceList={priceList} />;
+        return (
+          <>
+              <ProductCard productData={data} priceList={priceList} triggerFlag={triggerFlag} setTriggerFlag={setTriggerFlag}/>
+          </>
+        );
       })}
     </div>
   );

@@ -3,6 +3,7 @@ import { ordersData } from "../../../data/orders.js";
 import {
   addProductToCart,
   checkProductInCart,
+  deleteFromCartRepo,
   fetchAllProductRepo,
   fetchOffers,
   fetchOrderCount,
@@ -50,6 +51,8 @@ export const fetchProductsOnCart = async (req, res) => {
   res.json({ data: cartData });
 };
 
+
+//fetch price details according to the requirements
 export const fetchPriceAndOffers = async (req, res) => {
   const { userId } = req.body;
   const productsOncart = await fetchProductsOnCartRepo(userId);
@@ -116,7 +119,7 @@ export const fetchPriceAndOffers = async (req, res) => {
           const data = {
             productId: item.productId,
             productName: item.name,
-            totalAmountPerItem: item.count * item.price - 10,
+            totalAmountPerItem: item.count * (item.price - 10),
             count:item.count,
             offers: ["Combo Discount"],
           };
@@ -124,6 +127,17 @@ export const fetchPriceAndOffers = async (req, res) => {
           break;
         }
       }
+    }else{
+        if (product.key === "PF3") {
+            const data = {
+              productId: product.productId,
+              productName: product.name,
+              totalAmountPerItem: product.count * product.price,
+              count:product.count,
+              offers: [""],
+            };
+            priceDataList.push(data);
+          }
     }
 
     // condtion 4 - limited time discount
@@ -146,7 +160,7 @@ export const fetchPriceAndOffers = async (req, res) => {
           productName: product.name,
           totalAmountPerItem: product.price * product.count,
           count:product.count,
-          offers: [],
+          offers: [""],
         };
         priceDataList.push(data);
       }
@@ -286,3 +300,10 @@ export const fetchPriceAndOffers = async (req, res) => {
   res.json({status:true,data:responseData});
 
 };
+
+// delete the cartItem
+export const deleteProductsFromCart = async(req,res)=>{
+    const { userId, productId } = req.body;
+    const deleteCartProduct = await deleteFromCartRepo(userId,productId);
+    res.json({status:deleteCartProduct,message:"Product removed Successfully."})
+}

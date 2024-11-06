@@ -8,6 +8,10 @@ const NavBar = () => {
         setShowTopBanner(false)
     }
 
+    const goToCart = () =>{
+      window.location.href = '/cart'
+    }
+
   return (
     <>
     {showTopBanner &&
@@ -21,16 +25,16 @@ const NavBar = () => {
 
         <ul className={styles.navLinks}>
           <li>
-            <a href="#">Home</a>
+            <a href="/">Home</a>
           </li>
           <li>
-            <a href="#">About</a>
+            <a href="/">About</a>
           </li>
           <li>
-            <a href="#">New Arrivals</a>
+            <a href="/">New Arrivals</a>
           </li>
           <li>
-            <a href="#">Brands</a>
+            <a href="/">Brands</a>
           </li>
         </ul>
 
@@ -48,14 +52,12 @@ const NavBar = () => {
             </span>
             <span className={styles.badge}>2</span>
           </div>
-          <a href="../cart/cart.html">
-            <div className={styles.icon}>
+            <div className={styles.icon} onClick={goToCart}>
               <span>
                 <img src="/icons/Cart1.png" alt="" />
               </span>
               <span className={styles.badge}>4</span>
             </div>
-          </a>
           <div className={styles.icon}>
             <span>
               <img src="/icons/person.png" alt="" />

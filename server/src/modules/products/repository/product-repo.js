@@ -128,7 +128,16 @@ export const fetchOffers = async() => {
     return offers;
 }
 
-// fetch offers and price
-export const fetchPriceAndOffersRepo = async(userId) => {
+// delete product from cart
+export const deleteFromCartRepo = async(userId,productId) => {
+    const cartProduct = await Cart.findOneAndDelete({
+        userId:userId,
+        productId:productId
+    })
 
+    if(cartProduct){
+        return true;
+    }else{
+        return false;
+    }
 }
