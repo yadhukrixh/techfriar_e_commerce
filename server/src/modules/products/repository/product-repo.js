@@ -141,3 +141,21 @@ export const deleteFromCartRepo = async(userId,productId) => {
         return false;
     }
 }
+
+// decrease product count
+export const decreaseProductCounRepo = async(userId,productId,currentCount) => {
+  try {
+    const product = await fetchProduct(productId)
+    const count = product.key === 'PF1'?2:1;
+
+    const updateCount = await Cart.updateOne({userId:userId,productId:productId},{
+        $set:{
+            count:currentCount-count
+        }
+    });
+    return true
+  } catch(error) {
+    console.error(error)
+    return false;
+  }
+}

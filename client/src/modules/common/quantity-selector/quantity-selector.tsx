@@ -7,15 +7,20 @@ interface QuantitySelectorProps {
   minimum:number;
   quantity: number;
   setQuantity: (value: number) => void; // expects number only
+  updationValue:number;
+  addFunction:()=>void;
+  removeFunction:()=>void;
 }
 
-const QuantitySelector: React.FC<QuantitySelectorProps> = ({ minimum , quantity, setQuantity }) => {
+const QuantitySelector: React.FC<QuantitySelectorProps> = ({ minimum , quantity, setQuantity, updationValue,addFunction,removeFunction }) => {
   const handleIncrement = () => {
-    setQuantity(quantity ? quantity + 1 : quantity);
+    setQuantity(quantity ? quantity + (updationValue) : quantity);
+    addFunction();
   };
 
   const handleDecrement = () => {
-    setQuantity(quantity && quantity >minimum ? quantity - 1 : quantity);
+    setQuantity(quantity && quantity >minimum ? quantity - (updationValue) : quantity);
+    removeFunction();
   };
 
   const handleChange = (value: number | null) => {

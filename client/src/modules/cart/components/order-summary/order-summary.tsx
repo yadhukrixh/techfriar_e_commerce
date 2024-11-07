@@ -17,16 +17,17 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ ordrerSummaryData }) => {
     setShowOffers(!showOffers)
   };
 
+
   return (
     <div className="order-summary">
       <h3>Order Details</h3>
       <div className="summary-item">
         <span>Bag total</span>
-        <span>{ordrerSummaryData?.totalPrice}</span>
+        <span>${ordrerSummaryData?.totalPrice}</span>
       </div>
       <div className="summary-item">
         <span>Discount</span>
-        <span className="discount">- {ordrerSummaryData?.discount}</span>
+        <span className="discount">-${ordrerSummaryData?.discount.toFixed(3)}</span>
       </div>
       <div className="pop">
         <p className="offers-applied" onClick={someFunc}>
@@ -54,7 +55,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ ordrerSummaryData }) => {
               </ul>
               <div className="total-discount">
                 <span>Total Discount</span>
-                <span className="discount-amount">- ${ordrerSummaryData?.discount}</span>
+                <span className="discount-amount">- ${ordrerSummaryData?.discount?.toFixed(3)}</span>
               </div>
             </div>
           </div>
@@ -62,10 +63,10 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ ordrerSummaryData }) => {
       </div>
       <div className="summary-item total">
         <span>Total</span>
-        <span>${ordrerSummaryData?.totalPayableAmount}</span>
+        <span>${ordrerSummaryData?.totalPayableAmount.toFixed(3)}</span>
       </div>
       <p className="congrats-message">
-        Congratulations! You've Saved ${ordrerSummaryData?.discount} today!
+        Congratulations! You've Saved ${ordrerSummaryData?.discount.toFixed(3)} today!
       </p>
       <button className="checkout-btn">Go to Checkout</button>
     </div>

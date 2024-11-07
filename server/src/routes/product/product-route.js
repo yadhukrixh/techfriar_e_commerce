@@ -1,16 +1,18 @@
 import express from 'express';
-import { addToCart, deleteProductsFromCart, fetchAllProducts, fetchPriceAndOffers, fetchProductsOnCart } from '../../modules/products/controllers/product-controller.js';
+import { addToCart, decreaseProductCountFromcart, deleteProductsFromCart, fetchAllProducts, fetchPriceAndOffers, fetchProductsOnCart } from '../../modules/products/controllers/product-controller.js';
 
 const router = express.Router();
 
-router.get("/fetchAllProducts",fetchAllProducts)
+router.get("/fetchAllProducts",fetchAllProducts);
 
-router.post('/fetchProductsOnCart',fetchProductsOnCart)
+router.post('/fetchProductsOnCart',fetchProductsOnCart);
 
-router.post("/addToCart",addToCart)
+router.post("/addToCart",addToCart);
 
-router.post("/fetchPriceAndOffers",fetchPriceAndOffers)
+router.post("/fetchPriceAndOffers",fetchPriceAndOffers);
 
-router.post("/deleteProductsFromCart",deleteProductsFromCart)
+router.post("/deleteProductsFromCart",deleteProductsFromCart);
+
+router.post('/decreaseProductCountFromcart',decreaseProductCountFromcart)
 
 export default router

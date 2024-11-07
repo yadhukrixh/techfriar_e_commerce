@@ -1,6 +1,7 @@
 import axios from "axios";
 import { CartData } from "../views";
 import Swal from "sweetalert2";
+import { message } from "antd";
 
 export interface PriceAndOffers {
     productId: string;
@@ -63,6 +64,7 @@ export const fetchPriceAndOffers = async (setPriceDetails: (data: PriceAndOffers
     setMainCartData(data);
 }
 
+// delete product from cart
 export const deleteProductFromCart = async (productId: string, setShowCard: (status: boolean) => void, ) => {
     let userId;
     const cookies = document.cookie.split(';');
@@ -90,5 +92,33 @@ export const deleteProductFromCart = async (productId: string, setShowCard: (sta
             text: "Deletion Failed",
             icon: "error"
         });
+    }
+}
+
+// sbtract count of product
+export const subtractCartProductCount = async (productId:string) => {
+    try{
+        let userId;
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            // Remove leading spaces
+            cookie = cookie.trim();
+            if (cookie.startsWith('userToken')) {
+                // Return the value after the equal sign
+                userId = (cookie.split('=')[1] || null);
+            }
+        }
+
+        const response = await axios.post('http://localhost:4000/products/decreaseProductCountFromcart',{userId,productId});
+        console.log(response)
+        if(response.data.status){
+            Swal.fire({
+                title: "Success!",
+                text: "Count Updated",
+                icon: "success"
+            });
+        }
+    }catch(error){
+        console.error(error)
     }
 }

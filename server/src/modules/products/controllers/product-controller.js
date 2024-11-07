@@ -3,6 +3,7 @@ import { ordersData } from "../../../data/orders.js";
 import {
   addProductToCart,
   checkProductInCart,
+  decreaseProductCounRepo,
   deleteFromCartRepo,
   fetchAllProductRepo,
   fetchOffers,
@@ -306,4 +307,12 @@ export const deleteProductsFromCart = async(req,res)=>{
     const { userId, productId } = req.body;
     const deleteCartProduct = await deleteFromCartRepo(userId,productId);
     res.json({status:deleteCartProduct,message:"Product removed Successfully."})
+}
+
+// decrease product count from cart
+export const decreaseProductCountFromcart = async(req,res) => {
+  const {userId,productId} = req.body;
+  const productIsThere = await checkProductInCart(userId, productId);
+  const response = await decreaseProductCounRepo(userId,productId,productIsThere.data);
+  res.json({status:response});
 }

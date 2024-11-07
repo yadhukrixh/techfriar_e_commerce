@@ -2,7 +2,8 @@ import QuantitySelector from "@/modules/common/quantity-selector/quantity-select
 import React, { useEffect, useState } from "react";
 import "./product-card.css";
 import { CartData } from "../../views";
-import { deleteProductFromCart, PriceAndOffers } from "../../services/cart-services";
+import { deleteProductFromCart, PriceAndOffers, subtractCartProductCount } from "../../services/cart-services";
+import { addTocart } from "@/modules/home-page/services/home-services";
 
 interface ProductCardProps {
   productData: CartData;
@@ -18,21 +19,39 @@ const ProductCard: React.FC<ProductCardProps> = ({
   setTriggerFlag
 }) => {
   const [priceData, setPriceData] = useState<PriceAndOffers>();
-  const [quantity, setQuantity] = useState(priceData?.count);
+  const [quantity, setQuantity] = useState(1);
   const [offerPopup, setOfferPopup] = useState(false);
-  const [showCard,setShowcard] = useState(true)
+  const [showCard,setShowcard] = useState(true);
+  const [updationValue,setUpdationValue] = useState<number>(1);
 
+  // price card data setup
   useEffect(() => {
     for (const i of priceList) {
       if (i.productId === productData.productId) {
         setPriceData(i);
+        setQuantity(i.count);
+        if(i.productName === 'DAVIDOFF'){
+          setUpdationValue(2);
+        }else{
+          setUpdationValue(1);
+        }
       }
     }
   }, [priceList]);
 
+  // triggerflag setup to trigger the ftching on value updation
   useEffect(()=>{
     setTriggerFlag(!triggerFlag)
-  },[showCard])
+  },[showCard,quantity])
+
+  // handle value updation on the 
+  const handleAddProductCount = async() => {
+    await addTocart(productData.productId);
+  }
+
+  const handleRemoveProductCount = async() => {
+    await subtractCartProductCount(productData.productId);
+  }
 
   const aFunction = () => {
     setOfferPopup(!offerPopup);
@@ -47,7 +66,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <h3>{productData.name}</h3>
             </div>
             <p>{productData.description}</p>
-            <p className="price">${priceData?.totalAmountPerItem}</p>
+            <p className="price">${priceData?.totalAmountPerItem.toFixed(3)}</p>
             <div className="pop">
             <p className="offer" onClick={aFunction}>
                 {priceData?.offers.length} Offers Available
@@ -73,9 +92,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
             )}
             </div>
             <QuantitySelector
-            minimum={1}
-            quantity={priceData?.count ? priceData.count : 1}
+            minimum={updationValue}
+            quantity={quantity}
             setQuantity={setQuantity}
+            updationValue={updationValue}
+            addFunction={handleAddProductCount}
+            removeFunction={handleRemoveProductCount}
+
             />
         </div>
         <div className="product-actions" onClick={()=>{deleteProductFromCart(productData.productId,setShowcard)}}>
