@@ -1,19 +1,14 @@
-import { response } from "express";
-import { ordersData } from "../../../data/orders.js";
 import {
   addProductToCart,
   checkProductInCart,
   decreaseProductCounRepo,
   deleteFromCartRepo,
   fetchAllProductRepo,
-  fetchOffers,
   fetchOrderCount,
-  fetchProduct,
   fetchProductsOnCartRepo,
   updateProductCountOnCart,
 } from "../repository/product-repo.js";
 
-import moment from "moment";
 
 export const fetchAllProducts = async (req, res) => {
   const products = await fetchAllProductRepo();

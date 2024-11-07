@@ -58,6 +58,13 @@
     margin-bottom: 40px;
 }
 
+.errorMessage{
+    width: 100%;
+    font-size: 10px;
+    color: red;
+    text-align: center;
+}
+
 .signInText {
     text-align: center; /* Center the sign-in text */
     margin-top: 20px; /* Space above sign-in text */

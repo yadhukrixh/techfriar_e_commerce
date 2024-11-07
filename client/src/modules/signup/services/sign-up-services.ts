@@ -1,7 +1,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+import { SignupErrors } from "../views";
 
-export const userSignup = async (name: string, credential: string, password: string) => {
+export const userSignup = async (name: string, credential: string, password: string,setErrorMessages:(message:SignupErrors)=>void) => {
     try {
         if (!name || !credential || !password) {
             Swal.fire({
@@ -12,7 +13,6 @@ export const userSignup = async (name: string, credential: string, password: str
         }
 
         const response = await axios.post("http://localhost:4000/auth/signUp", { name, credential, password });
-        console.log(response)
         if (response.data.status) {
             Swal.fire({
                 title: "Success",
@@ -20,11 +20,11 @@ export const userSignup = async (name: string, credential: string, password: str
                 icon: "success"
             });
         }else{
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "User already exist"
-            });
+            setErrorMessages({
+                name:response.data.errors.name,
+                credential:response.data.errors.credential,
+                password:response.data.errors.password
+            })
         }
     } catch (error) {
         console.error(error)

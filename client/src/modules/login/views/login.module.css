@@ -45,6 +45,13 @@
     cursor: pointer; /* Change cursor on hover */
 }
 
+.errorMessage{
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: red;
+}
+
 .signUpButton {
     height: 56px;
     width: 100%;

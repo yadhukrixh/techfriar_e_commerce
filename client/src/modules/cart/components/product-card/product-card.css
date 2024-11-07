@@ -176,6 +176,7 @@
     gap: 20px;
   }
   .product-details {
+    width: 200px;
     margin-left: 30px;
   }
   /* Hide borders */
