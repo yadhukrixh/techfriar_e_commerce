@@ -19,10 +19,18 @@ const SignUp:React.FC<PageProps> = ({setShowLogin}) => {
   const [password,setPassword] = useState("");
   const [name,setName] = useState("");
   const [errorMessages,setErrorMessages] = useState<SignupErrors>();
+  const [type,setType] = useState('password');
+  const [eyeImage,setEyeImage] = useState("icons/eye.svg")
 
   const toggleAuth = () => {
     setShowLogin(true)
   }
+
+  const eyeToggle = () => {
+    setType(type === 'text'?'password':'text');
+    setEyeImage(type === 'text'?"icons/eye.svg":"icons/eye-fill.svg")
+  }
+
 
   return (
     <div className={styles.card}>
@@ -39,8 +47,8 @@ const SignUp:React.FC<PageProps> = ({setShowLogin}) => {
 
                 <p className="in-name">Password</p>
                 <div className={styles.passwordField}>
-                <InputComponent type="password" customClassName={styles.inputField} value={password} onChange={setPassword}/>
-                    <img src="icons/eye.svg" alt="Show Password" className={styles.eyeIcon} />
+                <InputComponent type={type} customClassName={styles.inputField} value={password} onChange={setPassword}/>
+                    <img src={eyeImage} alt="Show Password" className={styles.eyeIcon} onClick={eyeToggle} />
                 </div>
                 <p className={styles.errorMessage}>{errorMessages?.password}</p>
        

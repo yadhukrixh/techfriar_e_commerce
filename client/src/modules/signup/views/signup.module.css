@@ -40,6 +40,8 @@
 
 .eyeIcon {
     position: absolute;
+    width: 24px;
+    height: 24px;
     right: 42px; /* Position the eye icon inside the password field */
     top: 14px; /* Center vertically in the input field */
     cursor: pointer; /* Change cursor on hover */

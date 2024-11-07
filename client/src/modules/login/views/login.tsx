@@ -17,9 +17,16 @@ const Login:React.FC<PageProps> = ({setShowLogin}) => {
   const [credential, setCredential] = useState("");
   const [password,setPassword] = useState("");
   const [errorMessages,setErrorMessages] = useState<ErrorMessages>();
+  const [type,setType] = useState('password');
+  const [eyeImage,setEyeImage] = useState("icons/eye.svg")
 
   const toggleAuth = () => {
     setShowLogin(false)
+  }
+
+  const eyeToggle = () => {
+    setType(type === 'text'?'password':'text');
+    setEyeImage(type === 'text'?"icons/eye.svg":"icons/eye-fill.svg")
   }
 
 
@@ -33,11 +40,12 @@ const Login:React.FC<PageProps> = ({setShowLogin}) => {
         <p className={styles.errorMessage}>{errorMessages?.credential}</p>
         <p className="in-name">Password</p>
         <div className={styles.passwordField}>
-        <InputComponent type="password" customClassName={styles.inputField} value={password} onChange={setPassword}/>
+        <InputComponent type={type} customClassName={styles.inputField} value={password} onChange={setPassword}/>
           <img
-            src="icons/eye.svg"
+            src={eyeImage}
             alt="Show Password"
             className={styles.eyeIcon}
+            onClick={eyeToggle}
           />
         </div>
         <p className={styles.errorMessage}>{errorMessages?.password}</p>

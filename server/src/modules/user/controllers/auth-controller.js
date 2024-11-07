@@ -5,9 +5,7 @@ import jwt from "jsonwebtoken";
 export const loginController = async (req, res) => {
   try {
     const { credential, password } = req.body;
-    if (!credential || !password) {
-      return res.json({ status: false, message: "Crentials cant be null !" });
-    }
+
 
     function validateCredential(input) {
       const phoneRegex =
